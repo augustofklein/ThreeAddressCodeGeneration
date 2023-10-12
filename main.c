@@ -569,11 +569,6 @@ int Com_Composto(char Comp_c[])
    return 1;
 }
 
-int ValidaIncremento()
-{
-   return 1;
-}
-
 int ValidaVariavel()
 {
    if(token == TK_id)
@@ -582,6 +577,37 @@ int ValidaVariavel()
    }
    else
    {
+      return 0;
+   }
+}
+
+int ValidaIncremento()
+{
+   if(ValidaVariavel())
+   {
+      token = le_token();
+      if(token == TK_Mais)
+      {
+         token = le_token();
+         if(token == TK_Mais)
+         {
+            return 1;
+         }
+         else
+         {
+            printf("Esperava o operador de soma\n");
+            return 0;
+         }
+      }
+      else
+      {
+         printf("Esperava o operador de soma\n");
+         return 0;
+      }
+   }
+   else
+   {
+      printf("Esperava a definicao de variavel\n");
       return 0;
    }
 }
@@ -655,11 +681,31 @@ int Com_for(char if_c[])
                {
                   token = le_token();
                   if(ValidaIncremento()){
-
+                     token = le_token();
+                     if(token == TK_Fecha_Par)
+                     {
+                        token = le_token();
+                        char Com1_c[MAX_COD];
+                        if (Com(Com1_c))
+                        {
+                           {
+                              sprintf(if_c, "%s:\n%s%s:%s\tgoto %s\n%s:\n", labellaco, Rel_c, labelthen, Com1_c, labellaco, labelfim);
+                              return 1;
+                           }
+                        }else{
+                           printf("Esperava fecha par�nteses\n");
+                           return 0;
+                        }
+                     }
+                     else
+                     {
+                        printf("Esperava o caractere de fecha parenteses\n");
+                        return 0;
+                     }
                   }
                   else
                   {
-
+                     return 0;
                   }
                }
                else

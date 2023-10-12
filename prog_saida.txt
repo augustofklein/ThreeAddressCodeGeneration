@@ -1,0 +1,9 @@
+LB000:
+	T000 = 10
+	if i < T000 goto LB002
+	goto LB001
+LB002:	T001 = 1
+	T002=a+T001
+	a=T002
+	goto LB000
+LB001:
