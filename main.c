@@ -651,16 +651,33 @@ int main()
 {
    FILE *arqout;
    char Com_c[MAX_COD];
+
+   /*
    if ((arqin = fopen("c:\\teste\\prog.cpp", "rt")) == NULL)
    {
       printf("Erro na abertura do arquivo");
       exit(0);
    }
+
    if ((arqout = fopen("c:\\teste\\saida.kvmp", "wt")) == NULL)
    {
       printf("Erro na abertura do arquivo de saida");
       exit(0);
    }
+   */
+
+   if ((arqin = fopen("/Users/augusto/Projects/ThreeAddressCodeGeneration/prog_entrada.txt", "rt")) == NULL)
+   {
+      printf("Erro na abertura do arquivo");
+      exit(0);
+   }
+
+   if ((arqout = fopen("/Users/augusto/Projects/ThreeAddressCodeGeneration/prog_saida.txt", "wt")) == NULL)
+   {
+      printf("Erro na abertura do arquivo de saida");
+      exit(0);
+   }
+   
    token = le_token();
    char Com_p[MAX_COD];
    while (token != TK_Fim_Arquivo)
