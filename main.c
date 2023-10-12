@@ -345,7 +345,7 @@ int E(char E_p[MAX_COD], char E_c[MAX_COD]);
 int R(char R_hp[MAX_COD], char R_sp[MAX_COD], char R_hc[MAX_COD], char R_sc[MAX_COD]);
 int F(char F_p[MAX_COD], char F_c[MAX_COD]);
 int S(char S_hp[MAX_COD], char S_sp[MAX_COD], char S_hc[MAX_COD], char S_sc[MAX_COD]);
-int Rel(char Rel_p[MAX_COD], char Rel_c[MAX_COD]);
+int Rel(char Rel_c[MAX_COD], char Rel_true[MAX_COD], char Rel_false[MAX_COD]);
 
 // A-> E = A1
 
