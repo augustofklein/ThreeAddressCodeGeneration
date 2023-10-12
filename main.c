@@ -33,6 +33,7 @@
 #define TK_while 28
 #define TK_and_bitwise 29
 #define TK_and_logico 30
+#define TK_for 31
 
 /***********************************************************************************/
 /*                                                                                 */
@@ -83,6 +84,7 @@ tpal reservadas[] = {{"", 0},
                      {"if", TK_if},
                      {"else", TK_else},
                      {"while", TK_while},
+                     {"for", TK_for},
                      {"fim", -1}};
 
 FILE *arqin;
@@ -566,11 +568,130 @@ int Com_Composto(char Comp_c[])
    token = le_token(); // consome o fecha_chaves
    return 1;
 }
+
+int ValidaIncremento()
+{
+   return 1;
+}
+
+int ValidaVariavel()
+{
+   if(token == TK_id)
+   {
+      return 1;
+   }
+   else
+   {
+      return 0;
+   }
+}
+
+int ValidaValor()
+{
+   if(token == TK_Const_Int)
+   {
+      return 1;
+   }
+   else
+   {
+      return 0;
+   }
+}
+
+int ValidaInicializacao()
+{
+   // Verificação de variável
+   if(ValidaVariavel())
+   {
+      token = le_token();
+      // Verificação da atribuição
+      if(token == TK_Atrib)
+      {
+         token = le_token();
+         //Verificação do valor
+         if(ValidaValor())
+         {
+            return 1;
+         }else{
+            printf("Esperava atribuicao de valor\n");
+            return 0;
+         }
+      }else{
+         printf("Esperava ponto e virgula\n");
+         return 0;
+      }
+   }else{
+      printf("Esperava variavel\n");
+      return 0;
+   }
+}
+
+int Com_for(char if_c[])
+{
+   char Rel_c[MAX_COD], Com1_c[MAX_COD];
+   char labellaco[10], labelthen[10], labelfim[10];
+
+   geralabel(labellaco);
+   geralabel(labelthen);
+   geralabel(labelfim);
+   
+   token = le_token();
+
+   if (token == TK_Abre_Par)
+   {
+      token = le_token();
+      // Ex: i = 0
+      if(ValidaInicializacao())
+      {
+         //TODO: Adicionar verificação de comando composto de inicialização
+         token = le_token();
+         if(token == TK_pv)
+         {
+            token = le_token();
+            // Ex: i<10
+            if(Rel(Rel_c, labelthen, labelfim))
+            {
+               if(token == TK_pv)
+               {
+                  token = le_token();
+                  if(ValidaIncremento()){
+
+                  }
+                  else
+                  {
+
+                  }
+               }
+               else
+               {
+                  printf("Esperava ponto e virgula\n");
+                  return 0;
+               }
+            }
+            else
+            {
+               printf("Esperava abre parenteses\n");
+               return 0;
+            }
+         }
+         else
+         {
+            printf("Esperava ponto e virgula\n");
+            return 0;
+         }
+      }
+      else
+      {
+         return 0;
+      }
+   }
+}
+
 // com_while ->  while (E) com;
 int Com_while(char if_c[])
 {
    char Rel_c[MAX_COD], Com1_c[MAX_COD];
-   ;
+   
    char labellaco[10], labelfim[10], labelthen[10];
    geralabel(labellaco);
    geralabel(labelfim);
@@ -635,6 +756,8 @@ int Com(char Com_c[])
 {
    if (token == TK_while)
       return Com_while(Com_c);
+   else if (token == TK_for)
+      return Com_for(Com_c);
    else if (token == TK_Abre_Chaves)
       return Com_Composto(Com_c);
    else if (token == TK_pv)
