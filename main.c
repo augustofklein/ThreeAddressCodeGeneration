@@ -535,9 +535,7 @@ int F(char F_p[MAX_COD], char F_c[MAX_COD])
             strcpy(F_c, E_c);
             strcpy(F_p, E_p);
             return 1;
-         }
-         else
-         {
+         }else{
             printf("Erro!!! Esperava fecha par�nteses\n");
             return 0;
          }
@@ -592,17 +590,11 @@ int Com_while(char if_c[])
                   sprintf(if_c, "%s:\n%s%s:%s\tgoto %s\n%s:\n", labellaco, Rel_c, labelthen, Com1_c, labellaco, labelfim);
                   return 1;
                }
-            }
-
-            else
-            {
+            }else{
                printf("Esperava fecha par�nteses\n");
                return 0;
             }
-         }
-         else
-         {
-
+         }else{
             printf("Erro na express�o do if \n");
             return 0;
          }
@@ -680,7 +672,7 @@ int main()
          fprintf(arqout, "%s", Com_c);
          printf("%s\nplace=%s\n", Com_c, Com_p);
       }
-      getch();
+      //getch();
    }
    fclose(arqin);
    fclose(arqout);
