@@ -348,7 +348,8 @@ int R(char R_hp[MAX_COD], char R_sp[MAX_COD], char R_hc[MAX_COD], char R_sc[MAX_
 int F(char F_p[MAX_COD], char F_c[MAX_COD]);
 int S(char S_hp[MAX_COD], char S_sp[MAX_COD], char S_hc[MAX_COD], char S_sc[MAX_COD]);
 int Rel(char Rel_c[MAX_COD], char Rel_true[MAX_COD], char Rel_false[MAX_COD]);
-int ValidaValor();
+int Com(char Com_c[MAX_COD]);
+
 
 // A-> E = A1
 
@@ -553,8 +554,6 @@ int F(char F_p[MAX_COD], char F_c[MAX_COD])
 /*            */
 /**************/
 
-int Com(char Com_c[MAX_COD]);
-
 int Com_Composto(char Comp_c[])
 {
    char Com_C[MAX_COD];
@@ -568,134 +567,6 @@ int Com_Composto(char Comp_c[])
    }
    token = le_token(); // consome o fecha_chaves
    return 1;
-}
-
-int ValidaVariavel()
-{
-   if(token == TK_id)
-   {
-      return 1;
-   }
-   else
-   {
-      return 0;
-   }
-}
-
-int ValidaIncremento()
-{
-   if(ValidaVariavel())
-   {
-      token = le_token();
-      if(token == TK_Mais || token == TK_Menos)
-      {
-         token = le_token();
-         if(token == TK_Mais || token == TK_Menos)
-         {
-            return 1;
-         }
-         else
-         {
-            printf("Esperava o operador de soma\n");
-            return 0;
-         }
-      }
-      else if (token == TK_Atrib)
-      {
-         token = le_token();
-         if (ValidaVariavel())
-         {
-            token = le_token();
-            if (token == TK_Mais || token == TK_Menos)
-            {
-               token = le_token();
-               if (ValidaValor())
-               {
-                  token = le_token();
-                  return 1;
-               } else
-               {
-                  printf("Esperava valor do incremento\n");
-                  return 0;
-               }
-            } else
-            {
-               printf("Esperava operadores de soma ou subtração\n");
-               return 0;
-            }
-            
-         } else
-         {
-            printf("Esperava o operador de atribuição\n");
-            return 0;
-         }
-         
-      } else
-      {
-         printf("Esperava o comando de incremento da variavel\n");
-         return 0;
-      }
-   }
-   else
-   {
-      printf("Esperava a definicao de variavel\n");
-      return 0;
-   }
-}
-
-int ValidaValor()
-{
-   if(token == TK_Const_Int)
-   {
-      return 1;
-   }
-   else
-   {
-      return 0;
-   }
-}
-
-int ValidaInicializacao(char I_c[])
-{
-   // Verificação de variável
-   if(ValidaVariavel())
-   {
-      sprintf(I_c, "%s\t%s", I_c, lex);
-      token = le_token();
-      // Verificação da atribuição
-      if(token == TK_Atrib)
-      {
-         sprintf(I_c, "%s%s", I_c, lex);
-         token = le_token();
-         //Verificação do valor
-         if(ValidaValor())
-         {
-            sprintf(I_c, "%s%s\n", I_c, lex);
-            token = le_token();
-            if (token == TK_virgula)
-            {
-               token = le_token();
-               if (ValidaInicializacao(I_c))
-               {
-                  return 1;
-               } else {
-                  printf("Esperava novas atribuições de valores\n");
-                  return 0;
-               }
-            }
-            return 1;
-         }else{
-            printf("Esperava atribuicao de valor\n");
-            return 0;
-         }
-      }else{
-         printf("Esperava ponto e virgula\n");
-         return 0;
-      }
-   }else{
-      printf("Esperava variavel\n");
-      return 0;
-   }
 }
 
 int Com_for(char if_c[])
@@ -782,50 +653,6 @@ int Com_for(char if_c[])
    }
 }
 
-// com_while ->  while (E) com;
-int Com_while(char if_c[])
-{
-   char Rel_c[MAX_COD], Com1_c[MAX_COD];
-   
-   char labellaco[10], labelfim[10], labelthen[10];
-   geralabel(labellaco);
-   geralabel(labelfim);
-   geralabel(labelthen);
-   token = le_token();
-   if (token == TK_Abre_Par)
-   {
-      token = le_token();
-      if (Rel(Rel_c, labelthen, labelfim))
-         if (token == TK_Fecha_Par)
-         {
-            token = le_token();
-            char Com1_c[MAX_COD];
-            if (Com(Com1_c))
-            {
-               {
-                  sprintf(if_c, "%s:\n%s%s:%s\tgoto %s\n%s:\n", labellaco, Rel_c, labelthen, Com1_c, labellaco, labelfim);
-                  return 1;
-               }
-            }else{
-               printf("Esperava fecha par�nteses\n");
-               return 0;
-            }
-         }else{
-            printf("Erro na express�o do if \n");
-            return 0;
-         }
-      {
-         printf("Esperava abre par�nteses\n");
-         return 0;
-      }
-   }
-   else
-   {
-      printf("Esperava abre par�nteses\n");
-      return 0;
-   }
-}
-
 int Com_Exp(char Com_c[MAX_COD])
 {
    char id[10];
@@ -849,9 +676,7 @@ int Com_Exp(char Com_c[MAX_COD])
 
 int Com(char Com_c[])
 {
-   if (token == TK_while)
-      return Com_while(Com_c);
-   else if (token == TK_for)
+   if (token == TK_for)
       return Com_for(Com_c);
    else if (token == TK_Abre_Chaves)
       return Com_Composto(Com_c);
