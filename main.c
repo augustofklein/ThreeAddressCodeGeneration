@@ -586,10 +586,10 @@ int ValidaIncremento()
    if(ValidaVariavel())
    {
       token = le_token();
-      if(token == TK_Mais)
+      if(token == TK_Mais || token == TK_Menos)
       {
          token = le_token();
-         if(token == TK_Mais)
+         if(token == TK_Mais || token == TK_Menos)
          {
             return 1;
          }
@@ -599,9 +599,39 @@ int ValidaIncremento()
             return 0;
          }
       }
-      else
+      else if (token == TK_Atrib)
       {
-         printf("Esperava o operador de soma\n");
+         token = le_token();
+         if (ValidaVariavel())
+         {
+            token = le_token();
+            if (token == TK_Mais || token == TK_Menos)
+            {
+               token = le_token();
+               if (ValidaValor())
+               {
+                  token = le_token();
+                  return 1;
+               } else
+               {
+                  printf("Esperava valor do incremento\n");
+                  return 0;
+               }
+            } else
+            {
+               printf("Esperava operadores de soma ou subtração\n");
+               return 0;
+            }
+            
+         } else
+         {
+            printf("Esperava o operador de atribuição\n");
+            return 0;
+         }
+         
+      } else
+      {
+         printf("Esperava o comando de incremento da variavel\n");
          return 0;
       }
    }
@@ -691,7 +721,6 @@ int Com_for(char if_c[])
                {
                   token = le_token();
                   if(ValidaIncremento()){
-                     token = le_token();
                      if(token == TK_Fecha_Par)
                      {
                         token = le_token();
