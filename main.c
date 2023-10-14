@@ -348,6 +348,7 @@ int R(char R_hp[MAX_COD], char R_sp[MAX_COD], char R_hc[MAX_COD], char R_sc[MAX_
 int F(char F_p[MAX_COD], char F_c[MAX_COD]);
 int S(char S_hp[MAX_COD], char S_sp[MAX_COD], char S_hc[MAX_COD], char S_sc[MAX_COD]);
 int Rel(char Rel_c[MAX_COD], char Rel_true[MAX_COD], char Rel_false[MAX_COD]);
+int ValidaValor();
 
 // A-> E = A1
 
@@ -720,7 +721,11 @@ int Com_for(char if_c[])
                if(token == TK_pv)
                {
                   token = le_token();
-                  if(ValidaIncremento()){
+                  char E_c[MAX_COD], E_p[MAX_COD];
+   
+                  if (A(E_p, E_c))
+                  {
+                     sprintf(if_c, "%s", E_c);
                      if(token == TK_Fecha_Par)
                      {
                         token = le_token();
@@ -830,7 +835,7 @@ int Com_Exp(char Com_c[MAX_COD])
       }
       else
       {
-         printf("Faltou ponto-e-v�rgula ap�s atribui��o\n");
+         printf("Faltou ponto-e-virgula apos atribuicao\n");
          return 0;
       }
    }
