@@ -778,8 +778,10 @@ int main()
    char Com_p[MAX_COD];
    while (token != TK_Fim_Arquivo)
    {
-      if (Com(Com_c) == 0)
+      if (Com(Com_c) == 0){
          printf("Erro no comando!!!\n");
+         break;
+      }
       else
       {
          fprintf(arqout, "%s", Com_c);
