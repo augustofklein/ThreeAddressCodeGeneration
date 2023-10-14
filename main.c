@@ -655,24 +655,27 @@ int ValidaValor()
    }
 }
 
-int ValidaInicializacao()
+int ValidaInicializacao(char I_c[])
 {
    // Verificação de variável
    if(ValidaVariavel())
    {
+      sprintf(I_c, "%s\t%s", I_c, lex);
       token = le_token();
       // Verificação da atribuição
       if(token == TK_Atrib)
       {
+         sprintf(I_c, "%s%s", I_c, lex);
          token = le_token();
          //Verificação do valor
          if(ValidaValor())
          {
+            sprintf(I_c, "%s%s\n", I_c, lex);
             token = le_token();
             if (token == TK_virgula)
             {
                token = le_token();
-               if (ValidaInicializacao())
+               if (ValidaInicializacao(I_c))
                {
                   return 1;
                } else {
@@ -699,6 +702,8 @@ int Com_for(char if_c[])
 {
    char Rel_c[MAX_COD], Com1_c[MAX_COD];
    char labellaco[10], labelthen[10], labelfim[10];
+   char A_c[MAX_COD]; //C3E incremento
+   char I_c[MAX_COD]; //C3E inicializacao
 
    geralabel(labellaco);
    geralabel(labelthen);
@@ -710,7 +715,7 @@ int Com_for(char if_c[])
    {
       token = le_token();
       // Ex: i = 0
-      if(ValidaInicializacao())
+      if(ValidaInicializacao(I_c))
       {
          if(token == TK_pv)
          {
@@ -725,7 +730,7 @@ int Com_for(char if_c[])
    
                   if (A(E_p, E_c))
                   {
-                     sprintf(if_c, "%s", E_c);
+                     sprintf(A_c, "%s", E_c);
                      if(token == TK_Fecha_Par)
                      {
                         token = le_token();
@@ -733,11 +738,11 @@ int Com_for(char if_c[])
                         if (Com(Com1_c))
                         {
                            {
-                              sprintf(if_c, "%s:\n%s%s:%s\tgoto %s\n%s:\n", labellaco, Rel_c, labelthen, Com1_c, labellaco, labelfim);
+                              sprintf(if_c, "%s%s:\n%s%s:%s%s\tgoto %s\n%s:\n", I_c, labellaco, Rel_c, labelthen, Com1_c, A_c, labellaco, labelfim);
                               return 1;
                            }
                         }else{
-                           printf("Esperava fecha par�nteses\n");
+                           printf("Esperava fecha parenteses\n");
                            return 0;
                         }
                      }
