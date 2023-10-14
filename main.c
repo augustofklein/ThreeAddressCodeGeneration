@@ -637,6 +637,18 @@ int ValidaInicializacao()
          //Verificação do valor
          if(ValidaValor())
          {
+            token = le_token();
+            if (token == TK_virgula)
+            {
+               token = le_token();
+               if (ValidaInicializacao())
+               {
+                  return 1;
+               } else {
+                  printf("Esperava novas atribuições de valores\n");
+                  return 0;
+               }
+            }
             return 1;
          }else{
             printf("Esperava atribuicao de valor\n");
@@ -669,8 +681,6 @@ int Com_for(char if_c[])
       // Ex: i = 0
       if(ValidaInicializacao())
       {
-         //TODO: Adicionar verificação de comando composto de inicialização
-         token = le_token();
          if(token == TK_pv)
          {
             token = le_token();
@@ -821,27 +831,13 @@ int main()
    FILE *arqout;
    char Com_c[MAX_COD];
 
-   /*
-   if ((arqin = fopen("c:\\teste\\prog.cpp", "rt")) == NULL)
+   if ((arqin = fopen("C:\\Projetos\\ThreeAddressCodeGeneration\\prog_entrada.txt", "rt")) == NULL)
    {
       printf("Erro na abertura do arquivo");
       exit(0);
    }
 
-   if ((arqout = fopen("c:\\teste\\saida.kvmp", "wt")) == NULL)
-   {
-      printf("Erro na abertura do arquivo de saida");
-      exit(0);
-   }
-   */
-
-   if ((arqin = fopen("/Users/augusto/Projects/ThreeAddressCodeGeneration/prog_entrada.txt", "rt")) == NULL)
-   {
-      printf("Erro na abertura do arquivo");
-      exit(0);
-   }
-
-   if ((arqout = fopen("/Users/augusto/Projects/ThreeAddressCodeGeneration/prog_saida.txt", "wt")) == NULL)
+   if ((arqout = fopen("C:\\Projetos\\ThreeAddressCodeGeneration\\prog_saida.txt", "wt")) == NULL)
    {
       printf("Erro na abertura do arquivo de saida");
       exit(0);
@@ -858,7 +854,6 @@ int main()
          fprintf(arqout, "%s", Com_c);
          printf("%s\nplace=%s\n", Com_c, Com_p);
       }
-      //getch();
    }
    fclose(arqin);
    fclose(arqout);

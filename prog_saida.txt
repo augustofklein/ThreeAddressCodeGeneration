@@ -1,9 +1,11 @@
 LB000:
 	T000 = 10
-	if i < T000 goto LB002
-	goto LB001
-LB002:	T001 = 1
-	T002=a+T001
+	if i < T000 goto LB001
+	goto LB002
+LB001:	T001 = 1
+	T002=b+T001
 	a=T002
+	T003=c+d
+	c=T003
 	goto LB000
-LB001:
+LB002:
