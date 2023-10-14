@@ -569,6 +569,73 @@ int Com_Composto(char Comp_c[])
    return 1;
 }
 
+int ValidaVariavel()
+{
+   if(token == TK_id)
+   {
+      return 1;
+   }
+   else
+   {
+      return 0;
+   }
+}
+
+int ValidaValor()
+{
+   if(token == TK_Const_Int)
+   {
+      return 1;
+   }
+   else
+   {
+      return 0;
+   }
+}
+
+int ValidaInicializacao(char I_c[])
+{
+   // Verificação de variável
+   if(ValidaVariavel())
+   {
+      sprintf(I_c, "%s\t%s", I_c, lex);
+      token = le_token();
+      // Verificação da atribuição
+      if(token == TK_Atrib)
+      {
+         sprintf(I_c, "%s%s", I_c, lex);
+         token = le_token();
+         //Verificação do valor
+         if(ValidaValor())
+         {
+            sprintf(I_c, "%s%s\n", I_c, lex);
+            token = le_token();
+            if (token == TK_virgula)
+            {
+               token = le_token();
+               if (ValidaInicializacao(I_c))
+               {
+                  return 1;
+               } else {
+                  printf("Esperava novas atribuições de valores\n");
+                  return 0;
+               }
+            }
+            return 1;
+         }else{
+            printf("Esperava atribuicao de valor\n");
+            return 0;
+         }
+      }else{
+         printf("Esperava ponto e virgula\n");
+         return 0;
+      }
+   }else{
+      printf("Esperava variavel\n");
+      return 0;
+   }
+}
+
 int Com_for(char if_c[])
 {
    char Rel_c[MAX_COD], Com1_c[MAX_COD];
